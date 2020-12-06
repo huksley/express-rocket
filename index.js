@@ -115,8 +115,8 @@ const launch = options =>
         baseUrl,
         session: req.session,
         user:
-          session.passport && session.passport.user && session.passport.user.token
-            ? session.passport.user
+          req.session.passport && req.session.passport.user && req.session.passport.user.token
+            ? req.session.passport.user
             : undefined,
         content: content.index ? await content.index(req, res) : undefined,
         options
@@ -128,8 +128,8 @@ const launch = options =>
         baseUrl,
         session: req.session,
         user:
-          session.passport && session.passport.user && session.passport.user.token
-            ? session.passport.user
+          req.session.passport && req.session.passport.user && req.session.passport.user.token
+            ? req.session.passport.user
             : undefined,
         content: content.user ? await content.user(req, res) : undefined,
         options
@@ -170,7 +170,7 @@ const launch = options =>
     if (STRATEGY === 'local') {
       passport.use(
         new LocalStrategy(function (username, password, done) {
-          logger.verbose('username', username, 'password', password)
+          logger.verbose('Login username', username, 'password', password)
           if (username === 'test' && password === '123') {
             const profile = {
               id: username,
@@ -212,8 +212,8 @@ const launch = options =>
           baseUrl,
           session: req.session,
           user:
-            session.passport && session.passport.user && session.passport.user.token
-              ? session.passport.user
+            req.session.passport && req.session.passport.user && req.session.passport.user.token
+              ? req.session.passport.user
               : undefined,
           options
         })
