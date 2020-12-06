@@ -1,6 +1,6 @@
 {
   "name": "express-rocket",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Preconfigured, ready to rock Express JS",
   "main": "index.js",
   "repository": {
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "true",
     "dev": "nodemon -r ./livereload -r dotenv/config -e js,json -i views/ -i public/ -i test/dump/",
-    "deploy": "serverless deploy",
+    "release": "standard-version",
     "lint": "eslint --ext .js .",
     "prettier": "prettier -c .",
     "prettify": "prettier -c --write .",
@@ -39,6 +39,8 @@
     "serverless-http": "^2.6.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.13.0",
     "husky": "^4.3.0",
@@ -52,7 +54,8 @@
     "serverless-plugin-git-variables": "^5.0.1",
     "serverless-plugin-test-helper": "^2.4.5",
     "serverless-s3-block-public-access": "^1.0.1",
-    "shx": "^0.3.3"
+    "shx": "^0.3.3",
+    "standard-version": "^9.0.0"
   },
   "husky": {
     "hooks": {
@@ -77,5 +80,10 @@
     "trailingComma": "none",
     "useTabs": false,
     "vueIndentScriptAndStyle": true
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
