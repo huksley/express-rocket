@@ -19,12 +19,9 @@
     <script async defer>
       API_TOKEN = undefined
     </script>
-    {% } %}
-
-    <script async defer src="{%= baseUrl %}/script.js"></script>
-
-    {% if (livereload) { %}
+    {% } %} {% if (livereload) { %}
     <script async defer src="http://localhost:35729/livereload.js"></script>
-    {% } %} {%- include('footer') %}
+    {% } %} {%- include('footer') %} {% if (options.content.scripts) { %} {%- options.content.scripts %} {% }
+    %}
   </body>
 </html>

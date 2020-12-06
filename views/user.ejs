@@ -45,6 +45,7 @@
 
     {% if (livereload) { %}
     <script async defer src="http://localhost:35729/livereload.js"></script>
-    {% } %} {%- include('footer') %}
+    {% } %} {%- include('footer') %} {% if (options.content.scripts) { %} {%- options.content.scripts %} {% }
+    %}
   </body>
 </html>

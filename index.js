@@ -19,7 +19,7 @@ const ejs = require('ejs')
 const { User } = require('./lib/user')
 
 app.set('view engine', 'ejs')
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname, 'views'))
 ejs.rmWhitespace = true
 ejs.openDelimiter = '{'
 ejs.closeDelimiter = '}'
@@ -109,6 +109,10 @@ const launch = options =>
 
     // Mount the static files directory
     app.use(express.static(path.join(__dirname, 'public')))
+
+    if (options.staticPath) {
+      app.use(express.static(options.staticPath))
+    }
 
     app.get('/', async (req, res) => {
       res.render('index', {
