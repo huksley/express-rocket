@@ -1,0 +1,7 @@
+.vscode
+.serverless
+public/vendor
+CHANGELOG.md
+test/assets/**
+test/dump/**
+.env*

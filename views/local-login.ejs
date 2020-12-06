@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
+  </head>
+
+  <body>
+    {%- include('header') %}
+    <main>
+      <h1>Login</h1>
+
+      <form action="/auth/submit" method="post">
+        <fieldset>
+          <legend>Test login for local development environment. Not used in production.</legend>
+
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" value="test" required />
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" value="123" required />
+
+          <button type="submit">Login</button>
+        </fieldset>
+      </form>
+    </main>
+
+    {%- include('footer') %} {% if (livereload) { %}
+    <script async defer src="http://localhost:35729/livereload.js"></script>
+    {% } %}
+  </body>
+</html>

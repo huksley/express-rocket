@@ -1,0 +1,15 @@
+<header>
+  <nav>
+    <a href="/"> {%= options.content.logo ? options.content.logo : "⚡️" %} </a>
+    <ul>
+      <li><a href="/">Home</a></li>
+      {% if (user) { %}
+      <li><a href="/auth/logout">Logout</a></li>
+      <li>👤 <a href="/user">{%= user.displayName %}</a></li>
+      {% } else { %}
+      <li><a href="/auth/login">Login</a></li>
+      {% } %}
+    </ul>
+  </nav>
+  <h1>Rocket</h1>
+</header>

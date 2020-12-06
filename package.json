@@ -1,0 +1,81 @@
+{
+  "name": "express-rocket",
+  "version": "0.1.0",
+  "description": "Preconfigured, ready to rock Express JS",
+  "main": "index.js",
+  "repository": {
+    "git": "https://github.com/huksley/express-rocket"
+  },
+  "scripts": {
+    "test": "true",
+    "dev": "nodemon -r ./livereload -r dotenv/config -e js,json -i views/ -i public/ -i test/dump/",
+    "deploy": "serverless deploy",
+    "lint": "eslint --ext .js .",
+    "prettier": "prettier -c .",
+    "prettify": "prettier -c --write .",
+    "mocha": "mocha"
+  },
+  "author": "Ruslan Gainutdinov",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-mongodb-session": "^2.4.1",
+    "cookie-parser": "^1.4.5",
+    "cookies": "^0.8.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "helmet": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.13",
+    "nanoid": "^3.1.16",
+    "nocache": "^2.1.0",
+    "node-fetch": "^2.6.1",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "ramda": "^0.27.1",
+    "serverless-http": "^2.6.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^7.13.0",
+    "husky": "^4.3.0",
+    "livereload": "^0.9.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "serverless": "^1.83.2",
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-domain-manager": "^5.1.0",
+    "serverless-plugin-git-variables": "^5.0.1",
+    "serverless-plugin-test-helper": "^2.4.5",
+    "serverless-s3-block-public-access": "^1.0.1",
+    "shx": "^0.3.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && npm run lint && npm run test"
+    }
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "endOfLine": "auto",
+    "htmlWhitespaceSensitivity": "css",
+    "insertPragma": false,
+    "jsxBracketSameLine": false,
+    "jsxSingleQuote": false,
+    "printWidth": 110,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "requirePragma": false,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false,
+    "vueIndentScriptAndStyle": true
+  }
+}

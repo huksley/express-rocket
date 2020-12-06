@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Express JS Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
+  </head>
+
+  <body>
+    {%- include('header', { title: "User" }) %}
+    <main>
+      {% if (content) { %}
+      {%= content %}
+      {% } else { %}
+      {% if (user) { %}
+      <p>
+        <h4>Full name</h4>
+        {%= user.displayName %}
+      </p>
+
+      <p>
+        <h4>E-mail</h4>
+        {%= user.email %}
+      </p>
+
+      <p>
+        <h4>Token</h4>
+        <input type="text" readonly" value="{%= user.token %}" />
+      </p>
+      {% } %}
+      {% } %}
+    </main>
+
+    {% if (user) { %}
+    <script async defer>
+      API_TOKEN = '{%= session.passport.user.token %}'
+    </script>
+    {% } else { %}
+    <script async defer>
+      API_TOKEN = undefined
+    </script>
+    {% } %}
+
+    <script async defer src="{%= baseUrl %}/script.js"></script>
+
+    {% if (livereload) { %}
+    <script async defer src="http://localhost:35729/livereload.js"></script>
+    {% } %} {%- include('footer') %}
+  </body>
+</html>

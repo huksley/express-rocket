@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Express JS Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
+  </head>
+
+  <body>
+    {%- include('header') %}
+    <main>{%= content %}</main>
+
+    {% if (user) { %}
+    <script async defer>
+      API_TOKEN = '{%= user.token %}'
+    </script>
+    {% } else { %}
+    <script async defer>
+      API_TOKEN = undefined
+    </script>
+    {% } %}
+
+    <script async defer src="{%= baseUrl %}/script.js"></script>
+
+    {% if (livereload) { %}
+    <script async defer src="http://localhost:35729/livereload.js"></script>
+    {% } %} {%- include('footer') %}
+  </body>
+</html>

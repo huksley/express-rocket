@@ -1,0 +1,18 @@
+@import url('https://unpkg.com/mvp.css');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, System UI, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+footer hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+header nav a:hover {
+  text-decoration: none;
+}
