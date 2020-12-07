@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/huksley/express-rocket/compare/v0.1.3...v0.1.4) (2020-12-07)
+
+
+### Bug Fixes
+
+* repo field in package.json ([4c6847b](https://github.com/huksley/express-rocket/commit/4c6847bc09430b6c437abceb20e4427327ef02e8))
+
 ### [0.1.3](https://github.com/huksley/express-rocket/compare/v0.1.2...v0.1.3) (2020-12-07)
 
 ### [0.1.2](https://github.com/huksley/express-rocket/compare/v0.1.1...v0.1.2) (2020-12-07)
