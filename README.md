@@ -1,1 +1,1 @@
-# Express JS rocket powered middleware
+# Express JS Rocket powered middleware
