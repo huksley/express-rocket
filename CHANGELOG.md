@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/huksley/express-rocket/compare/v0.1.4...v0.1.5) (2020-12-25)
+
+
+### Features
+
+* add dao and crud methods ([2d4ca46](https://github.com/huksley/express-rocket/commit/2d4ca460015016f56adc70fdf0412b3a630a7f54))
+
 ### [0.1.4](https://github.com/huksley/express-rocket/compare/v0.1.3...v0.1.4) (2020-12-07)
 
 
