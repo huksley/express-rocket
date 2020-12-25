@@ -142,6 +142,14 @@ const launch = options => {
 
   app.checkToken = checkToken
   app.dao = dao.define
+  app.checkAuth = (req, res, next) => {
+    if (req.session && req.session.passport && req.session.passport.user) {
+      next()
+      return
+    }
+
+    checkToken(req, res, next)
+  }
 
   app.crud = (prefix, dao, options) => {
     options = options || {}
@@ -156,12 +164,7 @@ const launch = options => {
       const { body } = req
       const obj = { ...body, ...(options.required && options.required(req)) }
       logger.verbose('Adding', obj)
-      const created = await dao.upsert(
-        {
-          ...(options.required && options.required(req))
-        },
-        obj
-      )
+      const created = await dao.create(obj)
       res.status(200).json({ ...dao.json(created) })
     })
 
@@ -207,16 +210,10 @@ const launch = options => {
 
   app.userCrud = (prefix, dao, options) => {
     const updatedOptions = {
-      middleware: (req, res, next) => {
-        if (req.session && req.session.passport && req.session.passport.user) {
-          next()
-        }
-
-        checkToken(req, res, next)
-      },
-      filter: req => ({ userId: req.auth ? req.auth.userId : req.session.user.userId }),
+      middleware: app.checkAuth,
+      filter: req => ({ userId: req.auth ? req.auth.userId : req.session.passport.user.userId }),
       required: req => ({
-        userId: req.auth ? req.auth.userId : req.session.user.userId
+        userId: req.auth ? req.auth.userId : req.session.passport.user.userId
       }),
       ...options
     }
@@ -357,7 +354,13 @@ const launch = options => {
       '/auth/login',
       passport.authenticate('google', {
         // https://developers.google.com/identity/protocols/oauth2/web-server
-        scope: ['profile', 'email'],
+        scope: [
+          'profile',
+          'email',
+          'https://www.googleapis.com/auth/presentations',
+          'https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive'
+        ],
         prompt: 'consent',
         accessType: 'offline',
         includeGrantedScopes: true
