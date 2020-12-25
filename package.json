@@ -11,7 +11,8 @@
     "lint": "eslint --ext .js .",
     "prettier": "prettier -c .",
     "prettify": "prettier -c --write .",
-    "mocha": "mocha"
+    "mocha": "mocha",
+    "publish": "git push && git push --tags && npm publish --access public"
   },
   "author": "Ruslan Gainutdinov",
   "license": "MIT",
