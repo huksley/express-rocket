@@ -17,6 +17,7 @@ const MongoDBStore = require('connect-mongodb-session')(session)
 const LocalStrategy = require('passport-local').Strategy
 const ejs = require('ejs')
 const { User } = require('./lib/user')
+const dao = require('./lib/dao')
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -140,6 +141,88 @@ const launch = options => {
   })
 
   app.checkToken = checkToken
+  app.dao = dao.define
+
+  app.crud = (prefix, dao, options) => {
+    options = options || {}
+    const mw = options.middleware ? options.middleware : (_req, _res, next) => next()
+    app.get(prefix, mw, async (req, res) => {
+      const records = await dao.filter({ ...(options.filter && options.filter(req)) })
+      logger.verbose('Listing', dao.name)
+      res.status(200).json(records.map(dao.json))
+    })
+
+    app.post(prefix, mw, async (req, res) => {
+      const { body } = req
+      const obj = { ...body, ...(options.required && options.required(req)) }
+      logger.verbose('Adding', obj)
+      const created = await dao.upsert(
+        {
+          ...(options.required && options.required(req))
+        },
+        obj
+      )
+      res.status(200).json({ ...dao.json(created) })
+    })
+
+    app.get(prefix + '/:id', mw, async (req, res) => {
+      const id = req.params.id
+      const filter = { _id: id, ...(options.required && options.required(req)) }
+      logger.verbose('Getting', filter)
+      const obj = await dao.find(filter)
+      if (obj === undefined) {
+        res.status(404).send()
+      } else {
+        res.status(200).json({ ...dao.json(obj) })
+      }
+    })
+
+    app.patch(prefix + '/:id', mw, async (req, res) => {
+      const id = req.params.id
+      const { body } = req
+      const filter = { _id: id, ...(options.required && options.required(req)) }
+      logger.verbose('Updating', filter)
+      const obj = await dao.find(filter)
+      if (obj === undefined) {
+        res.status(404).send()
+      } else {
+        const obj = await dao.upsert(filter, { ...filter, ...body })
+        res.status(200).json({ ...dao.json(obj) })
+      }
+    })
+
+    app.delete(prefix + '/:id', mw, async (req, res) => {
+      const id = req.params.id
+      const filter = { _id: id, ...(options.required && options.required(req)) }
+      logger.verbose('Deleting', filter)
+      const obj = await dao.find(filter)
+      if (obj === undefined) {
+        res.status(404).send()
+      } else {
+        await dao.delete(id)
+        res.status(204).send(null)
+      }
+    })
+  }
+
+  app.userCrud = (prefix, dao, options) => {
+    const updatedOptions = {
+      middleware: (req, res, next) => {
+        if (req.session && req.session.passport && req.session.passport.user) {
+          next()
+        }
+
+        checkToken(req, res, next)
+      },
+      filter: req => ({ userId: req.auth ? req.auth.userId : req.session.user.userId }),
+      required: req => ({
+        userId: req.auth ? req.auth.userId : req.session.user.userId
+      }),
+      ...options
+    }
+    app.crud(prefix, dao, updatedOptions)
+  }
+
   if (options.apis) {
     options.apis(app, options)
   }
@@ -175,35 +258,40 @@ const launch = options => {
     passport.use(
       new LocalStrategy(function (username, password, done) {
         logger.verbose('Login username', username, 'password', password)
+        const email = 'test@email.com'
         if (username === 'test' && password === '123') {
           const profile = {
             id: username,
-            email: 'test@email.com',
+            email,
             email_verified: true,
             displayName: 'Tester',
             emails: [
               {
-                value: 'test@email.com',
+                value: email,
                 email_verified: true
               }
             ]
           }
-          signToken({
-            id: profile.id,
-            sub: profile.email,
-            accessToken: 'deadbeef',
-            refreshToken: 'beefdead'
-          }).then(token => {
-            profile.token = token
-            User.upsert(profile)
-              .then(user => {
-                logger.info('Updated user', user._id)
-                done(null, profile)
-              })
-              .catch(error => {
-                logger.warn('Failed to update user', error)
-                done(error)
-              })
+          const accessToken = 'deadbeef'
+          const refreshToken = 'beefdead'
+          profile.credentials = {
+            accessToken,
+            refreshToken
+          }
+          profile.email = email
+          User.upsert(profile).then(user => {
+            logger.info('Got user', user._id)
+            signToken({
+              id: profile.id,
+              sub: profile.email,
+              accessToken,
+              refreshToken,
+              userId: user._id
+            }).then(token => {
+              profile.token = token
+              profile.userId = user._id
+              done(null, profile)
+            })
           })
         } else {
           return done(null, false)
@@ -242,23 +330,24 @@ const launch = options => {
         function (req, accessToken, refreshToken, profile, done) {
           const email = profile.email ? profile.email : profile.emails[0].value
           logger.info('Logged in to Google', profile.id, email)
-          signToken({
-            id: profile.id,
-            sub: email,
+          profile.credentials = {
             accessToken,
             refreshToken
-          }).then(token => {
-            profile.token = token
-            profile.email = email
-            User.upsert(profile)
-              .then(user => {
-                logger.info('Updated user', user._id)
-                done(null, profile)
-              })
-              .catch(error => {
-                logger.warn('Failed to update user', error)
-                done(error)
-              })
+          }
+          profile.email = email
+          User.upsert(profile).then(user => {
+            logger.info('Got user', user._id)
+            signToken({
+              id: profile.id,
+              sub: email,
+              accessToken,
+              refreshToken,
+              userId: user._id
+            }).then(token => {
+              profile.token = token
+              profile.userId = user._id
+              done(null, profile)
+            })
           })
         }
       )
@@ -318,7 +407,9 @@ const launch = options => {
               : '')
         )
     } else {
-      res.status(500).send({ message: message || 'Internal server error' })
+      res
+        .status(!isNaN(httpCode) && httpCode > 399 && httpCode < 599 ? httpCode : 500)
+        .send({ message: message || 'Internal server error' })
     }
   })
 
