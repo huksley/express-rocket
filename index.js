@@ -150,7 +150,7 @@ const launch = options => {
     }
   })
 
-  app.get('/user', async (req, res) => {
+  app.get('/user(/*)?', async (req, res) => {
     res.render('user', {
       baseUrl,
       session: req.session,
