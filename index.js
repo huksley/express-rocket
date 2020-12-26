@@ -129,6 +129,27 @@ const launch = options => {
     })
   })
 
+  const knownPage = /faq|changelog|privacy|tos|feedback|support|sandbox|pricing/g
+  app.get('/:page', async (req, res, next) => {
+    const page = req.params.page
+    if (page.match(knownPage)) {
+      const contentFunc = content[page]
+      res.render('index', {
+        baseUrl,
+        session: req.session,
+        user:
+          req.session.passport && req.session.passport.user && req.session.passport.user.token
+            ? req.session.passport.user
+            : undefined,
+        title: content.title ? content.title(req, res) : page,
+        content: contentFunc ? await contentFunc(req, res) : '<h1>' + page + '</h1> No such page: ' + page,
+        options
+      })
+    } else {
+      next()
+    }
+  })
+
   app.get('/user', async (req, res) => {
     res.render('user', {
       baseUrl,
