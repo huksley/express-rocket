@@ -27,7 +27,7 @@ ejs.closeDelimiter = '}'
 
 const launch = options => {
   options = options ? options : {}
-  content = options.content ? options.content : {}
+  const content = options.content ? options.content : {}
   options.content = content
   app.options = options
 
@@ -93,6 +93,7 @@ const launch = options => {
   app.use(bodyParser.json())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(cookieParser())
+  app.disable('etag')
 
   app.use(
     cors((req, callback) => {
@@ -107,12 +108,12 @@ const launch = options => {
     })
   )
 
-  // Mount the static files directory
-  app.use(express.static(path.join(__dirname, 'public')))
-
   if (options.staticPath) {
     app.use(express.static(options.staticPath))
   }
+
+  // Mount the static files directory
+  app.use(express.static(path.join(__dirname, 'public')))
 
   app.get('/', async (req, res) => {
     res.render('index', {
@@ -122,6 +123,7 @@ const launch = options => {
         req.session.passport && req.session.passport.user && req.session.passport.user.token
           ? req.session.passport.user
           : undefined,
+      title: content.title ? content.title(req, res) : 'Example',
       content: content.index ? await content.index(req, res) : undefined,
       options
     })
@@ -135,6 +137,7 @@ const launch = options => {
         req.session.passport && req.session.passport.user && req.session.passport.user.token
           ? req.session.passport.user
           : undefined,
+      title: content.title ? content.title(req, res) : 'User',
       content: content.user ? await content.user(req, res) : undefined,
       options
     })

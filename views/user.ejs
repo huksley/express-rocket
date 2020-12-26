@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Express JS Template</title>
+    <title>{%= title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
   </head>
 
   <body>
-    {%- include('header', { title: "User" }) %}
+    {%- include('header') %}
     <main>
       {% if (content) { %}
-      {%= content %}
+      {%- content %}
       {% } else { %}
       {% if (user) { %}
       <p>
@@ -30,18 +30,6 @@
       {% } %}
       {% } %}
     </main>
-
-    {% if (user) { %}
-    <script async defer>
-      API_TOKEN = '{%= session.passport.user.token %}'
-    </script>
-    {% } else { %}
-    <script async defer>
-      API_TOKEN = undefined
-    </script>
-    {% } %}
-
-    <script async defer src="{%= baseUrl %}/script.js"></script>
 
     {% if (livereload) { %}
     <script async defer src="http://localhost:35729/livereload.js"></script>

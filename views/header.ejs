@@ -1,6 +1,6 @@
 <header>
   <nav>
-    <a href="/"> {%= options.content.logo ? options.content.logo : "⚡️" %} </a>
+    <a href="/"> {%- options.content.logo ? options.content.logo : "⚡️" %} </a>
     <ul>
       <li><a href="/">Home</a></li>
       {% if (user) { %}
@@ -11,5 +11,5 @@
       {% } %}
     </ul>
   </nav>
-  <h1>Rocket</h1>
+  <h1>{%= title %}</h1>
 </header>

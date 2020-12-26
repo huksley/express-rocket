@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Express JS Template</title>
+    <title>{%= title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
   </head>
@@ -11,17 +11,9 @@
     {%- include('header') %}
     <main>{%- content %}</main>
 
-    {% if (user) { %}
-    <script async defer>
-      API_TOKEN = '{%= user.token %}'
-    </script>
-    {% } else { %}
-    <script async defer>
-      API_TOKEN = undefined
-    </script>
-    {% } %} {% if (livereload) { %}
+    {%- include('footer') %} {% if (options.content.scripts) { %} {%- options.content.scripts %} {% } %} {% if
+    (livereload) { %}
     <script async defer src="http://localhost:35729/livereload.js"></script>
-    {% } %} {%- include('footer') %} {% if (options.content.scripts) { %} {%- options.content.scripts %} {% }
-    %}
+    {% } %}
   </body>
 </html>
