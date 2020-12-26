@@ -378,16 +378,18 @@ const launch = options => {
       '/auth/login',
       passport.authenticate('google', {
         // https://developers.google.com/identity/protocols/oauth2/web-server
-        scope: [
-          'profile',
-          'email',
-          'https://www.googleapis.com/auth/presentations',
-          'https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive'
-        ],
+        scope: process.env.GOOGLE_SCOPES
+          ? process.env.GOOGLE_SCOPES.split(' ')
+          : [
+              'profile',
+              'email',
+              'https://www.googleapis.com/auth/presentations',
+              'https://www.googleapis.com/auth/spreadsheets',
+              'https://www.googleapis.com/auth/drive'
+            ],
         prompt: 'consent',
         accessType: 'offline',
-        includeGrantedScopes: true
+        includeGrantedScopes: false
       })
     )
 
