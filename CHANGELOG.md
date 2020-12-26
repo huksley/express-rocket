@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/huksley/express-rocket/compare/v0.1.5...v0.1.6) (2020-12-26)
+
+
+### Features
+
+* configurable google scopes ([289db2f](https://github.com/huksley/express-rocket/commit/289db2f21538db2f4b1db24a8701418813e1bee5))
+* dynamic title and user page ([97d8712](https://github.com/huksley/express-rocket/commit/97d871210b970df9f9fc5cad50524e188aee3dad))
+* known pages ([0015494](https://github.com/huksley/express-rocket/commit/0015494562a6090737a7aa4e862b12716a4a79b1))
+
+
+### Bug Fixes
+
+* bug fixes ([a7aefdb](https://github.com/huksley/express-rocket/commit/a7aefdb8b6251ab7fa4a69e5d0d42d22642feeb6))
+* make react router work ([cba21fc](https://github.com/huksley/express-rocket/commit/cba21fcd930ad1469c8ee7ed08d14fa9310393e3))
+
 ### [0.1.5](https://github.com/huksley/express-rocket/compare/v0.1.4...v0.1.5) (2020-12-25)
 
 
