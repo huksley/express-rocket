@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/huksley/express-rocket/compare/v0.1.6...v0.1.7) (2020-12-27)
+
+
+### Features
+
+* head tags support ([c4eb2db](https://github.com/huksley/express-rocket/commit/c4eb2dbb7f77ff3da034faa4ff5cb0c0fb453f16))
+
 ### [0.1.6](https://github.com/huksley/express-rocket/compare/v0.1.5...v0.1.6) (2020-12-26)
 
 
