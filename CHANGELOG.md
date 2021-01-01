@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.12](https://github.com/huksley/express-rocket/compare/v0.1.11...v0.1.12) (2021-01-01)
+
+
+### Bug Fixes
+
+* properly save tokens ([3e8a8cd](https://github.com/huksley/express-rocket/commit/3e8a8cd118adfd6b8758a831ec70cb0424f7384f))
+
 ### [0.1.11](https://github.com/huksley/express-rocket/compare/v0.1.10...v0.1.11) (2021-01-01)
 
 
