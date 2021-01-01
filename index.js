@@ -301,7 +301,7 @@ const launch = options => {
             refreshToken
           }
           profile.email = email
-          User.upsert(profile).then(user => {
+          User.upsert({ email }, profile).then(user => {
             logger.info('Got user', user._id)
             signToken({
               id: profile.id,
@@ -357,7 +357,7 @@ const launch = options => {
             refreshToken
           }
           profile.email = email
-          User.upsert(profile).then(user => {
+          User.upsert({ email }, profile).then(user => {
             logger.info('Got user', user._id)
             signToken({
               id: profile.id,
