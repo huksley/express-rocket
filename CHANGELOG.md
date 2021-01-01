@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.11](https://github.com/huksley/express-rocket/compare/v0.1.10...v0.1.11) (2021-01-01)
+
+
+### Bug Fixes
+
+* properly update profile on login ([8462fe3](https://github.com/huksley/express-rocket/commit/8462fe349ae86a18571430ee023fdcd40e85c6a6))
+
 ### [0.1.10](https://github.com/huksley/express-rocket/compare/v0.1.9...v0.1.10) (2021-01-01)
 
 
