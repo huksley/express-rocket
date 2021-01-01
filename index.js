@@ -199,7 +199,7 @@ const launch = options => {
       logger.verbose('Getting', filter)
       const obj = await dao.find(filter)
       if (obj === undefined) {
-        res.status(404).send()
+        res.status(404).json({ message: 'Not found' })
       } else {
         res.status(200).json({ ...dao.json(obj) })
       }
@@ -212,7 +212,7 @@ const launch = options => {
       logger.verbose('Updating', filter)
       const obj = await dao.find(filter)
       if (obj === undefined) {
-        res.status(404).send()
+        res.status(404).json({ message: 'Not found' })
       } else {
         const obj = await dao.upsert(filter, { ...filter, ...body })
         res.status(200).json({ ...dao.json(obj) })
@@ -225,7 +225,7 @@ const launch = options => {
       logger.verbose('Deleting', filter)
       const obj = await dao.find(filter)
       if (obj === undefined) {
-        res.status(404).send()
+        res.status(404).json({ message: 'Not found' })
       } else {
         await dao.delete(id)
         res.status(204).send(null)
