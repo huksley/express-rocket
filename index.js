@@ -174,6 +174,7 @@ const launch = options => {
 
     checkToken(req, res, next)
   }
+  app.findUser = User.find
 
   app.crud = (prefix, dao, options) => {
     options = options || {}
