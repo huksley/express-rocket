@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.13](https://github.com/huksley/express-rocket/compare/v0.1.12...v0.1.13) (2021-01-01)
+
+
+### Bug Fixes
+
+* dao proper promise reject ([0ebff62](https://github.com/huksley/express-rocket/commit/0ebff62f5d90e544618aec2c8c7874650846a915))
+* send message with json error http response ([d9faea5](https://github.com/huksley/express-rocket/commit/d9faea5930bac9a41bf97ceb1970a8f42d047fae))
+
 ### [0.1.12](https://github.com/huksley/express-rocket/compare/v0.1.11...v0.1.12) (2021-01-01)
 
 
