@@ -12,7 +12,7 @@
     "prettier": "prettier -c .",
     "prettify": "prettier -c --write .",
     "mocha": "mocha",
-    "publish": "git push && git push --tags && npm publish --access public"
+    "pub": "git push && git push --tags && npm publish --access public"
   },
   "author": "Ruslan Gainutdinov",
   "license": "MIT",
@@ -27,6 +27,7 @@
     "express-session": "^1.17.1",
     "helmet": "^4.2.0",
     "jsonwebtoken": "^8.5.1",
+    "livereload": "^3.3.1",
     "livereload-js": "^3.3.1",
     "mongoose": "^5.10.13",
     "nanoid": "^3.1.16",

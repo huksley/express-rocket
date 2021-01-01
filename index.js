@@ -150,8 +150,8 @@ const launch = options => {
     }
   })
 
-  app.get('/user(/*)?', async (req, res) => {
-    res.render('user', {
+  app.get('/dashboard(/*)?', async (req, res) => {
+    res.render('dashboard', {
       baseUrl,
       session: req.session,
       user:
@@ -159,7 +159,7 @@ const launch = options => {
           ? req.session.passport.user
           : undefined,
       title: content.title ? content.title(req, res) : 'User',
-      content: content.user ? await content.user(req, res) : undefined,
+      content: content.dashboard ? await content.dashboard(req, res) : undefined,
       options
     })
   })
