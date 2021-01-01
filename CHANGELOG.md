@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://github.com/huksley/express-rocket/compare/v0.1.9...v0.1.10) (2021-01-01)
+
+
+### Features
+
+* app.findUser method ([4a7f5ef](https://github.com/huksley/express-rocket/commit/4a7f5efa797bf39a20edff8af062e58c63ad46e9))
+
 ### [0.1.9](https://github.com/huksley/express-rocket/compare/v0.1.8...v0.1.9) (2021-01-01)
 
 
