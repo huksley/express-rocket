@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/huksley/express-rocket/compare/v0.1.7...v0.1.8) (2021-01-01)
+
+
+### Features
+
+* rename user page to dashboard ([286cfe2](https://github.com/huksley/express-rocket/commit/286cfe20146915483e0185ec57058abb21579b1f))
+
 ### [0.1.7](https://github.com/huksley/express-rocket/compare/v0.1.6...v0.1.7) (2020-12-27)
 
 
