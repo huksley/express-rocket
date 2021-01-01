@@ -257,6 +257,7 @@ const launch = options => {
         session.passport && session.passport.user && session.passport.user.token
           ? session.passport.user
           : undefined,
+      title: content.title ? content.title(req, res) : 'Error',
       content: content.error ? await content.error(req, res) : undefined,
       error: 'Unknown error occured'
     })
@@ -302,7 +303,6 @@ const launch = options => {
           }
           profile.email = email
           User.upsert({ email }, profile).then(user => {
-            logger.info('Got user', user._id)
             signToken({
               id: profile.id,
               sub: profile.email,
@@ -337,7 +337,7 @@ const launch = options => {
       '/auth/submit',
       passport.authenticate('local', { failureRedirect: baseUrl + '/error' }),
       function (req, res) {
-        res.redirect('/')
+        res.redirect('/dashboard')
       }
     )
   }
@@ -358,7 +358,6 @@ const launch = options => {
           }
           profile.email = email
           User.upsert({ email }, profile).then(user => {
-            logger.info('Got user', user._id)
             signToken({
               id: profile.id,
               sub: email,
@@ -379,15 +378,7 @@ const launch = options => {
       '/auth/login',
       passport.authenticate('google', {
         // https://developers.google.com/identity/protocols/oauth2/web-server
-        scope: process.env.GOOGLE_SCOPES
-          ? process.env.GOOGLE_SCOPES.split(' ')
-          : [
-              'profile',
-              'email',
-              'https://www.googleapis.com/auth/presentations',
-              'https://www.googleapis.com/auth/spreadsheets',
-              'https://www.googleapis.com/auth/drive'
-            ],
+        scope: process.env.GOOGLE_SCOPES ? process.env.GOOGLE_SCOPES.split(' ') : ['profile', 'email'],
         prompt: 'consent',
         accessType: 'offline',
         includeGrantedScopes: false
@@ -401,7 +392,7 @@ const launch = options => {
       }),
       function (req, res) {
         // Successful authentication, redirect success
-        res.redirect('/')
+        res.redirect('/dashboard')
       }
     )
   }
