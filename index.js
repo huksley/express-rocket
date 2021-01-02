@@ -55,8 +55,8 @@ const launch = options => {
     session({
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
-        secure: true,
-        httpOnly: process.env.NODE_ENV === production
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true
       },
       resave: false,
       saveUninitialized: false,
