@@ -1,6 +1,6 @@
 {
   "name": "@huksley/express-rocket",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Preconfigured, ready to rock Express JS",
   "main": "index.js",
   "repository": "git+https://github.com/huksley/express-rocket",
