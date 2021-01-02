@@ -42,7 +42,7 @@ const launch = options => {
   var store = new MongoDBStore({
     uri: mongoUrl,
     collection: (options.modelPrefix || 'Rocket') + 'Sessions',
-    expires: 1000 * 60 * 60 * 24 * 30, // 1 day in milliseconds
+    expires: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
     connectionOptions: {
       bufferMaxEntries: 0,
       useNewUrlParser: true,
@@ -53,6 +53,11 @@ const launch = options => {
 
   app.use(
     session({
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days in milliseconds
+        secure: true,
+        httpOnly: process.env.NODE_ENV === production
+      },
       resave: false,
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -108,6 +113,33 @@ const launch = options => {
     })
   )
 
+  // Disable caching
+  app.use(nocache())
+
+  // Log requests and responses
+  if (logger.isVerbose) {
+    const staticMatch = /.*\.(svg|png|gif|jpg|js|css|ico|json)$/i
+    app.use((request, response, next) => {
+      const { method, url } = request
+      const ignore = staticMatch.test(url)
+      if (ignore) {
+        next()
+      } else {
+        const end = response.end
+        const started = new Date().getTime()
+        logger.verbose(`--> ${method} ${url}`)
+        response.end = (...args) => {
+          const { statusCode } = response
+          const now = new Date().getTime()
+          const elapsed = now - started
+          logger.verbose(`<-- ${statusCode} ${method} ${url} Δ ${elapsed}ms`)
+          end.apply(null, args)
+        }
+        next()
+      }
+    })
+  }
+
   if (options.staticPath) {
     app.use(express.static(options.staticPath))
   }
@@ -129,10 +161,10 @@ const launch = options => {
     })
   })
 
-  const knownPage = /faq|changelog|privacy|tos|feedback|support|sandbox|pricing/g
+  const knownPage = /^faq|changelog|privacy|tos|feedback|support|sandbox|pricing$/
   app.get('/:page', async (req, res, next) => {
     const page = req.params.page
-    if (page.match(knownPage)) {
+    if (knownPage.test(page)) {
       const contentFunc = content[page]
       res.render('index', {
         baseUrl,
@@ -395,23 +427,6 @@ const launch = options => {
         res.redirect('/dashboard')
       }
     )
-  }
-
-  // Disable caching
-  app.use(nocache())
-
-  // Log requests and responses
-  if (logger.isVerbose) {
-    app.use((request, response, next) => {
-      const { method, url } = request
-      const __started = new Date().getTime()
-      logger.verbose(`--> ${method} ${url}`)
-      next()
-      const { statusCode } = response
-      const now = new Date().getTime()
-      const elapsed = now - __started
-      logger.verbose(`<-- ${statusCode} ${method} ${url} Δ ${elapsed}ms`)
-    })
   }
 
   app.use(function (err, req, res, _next) {
