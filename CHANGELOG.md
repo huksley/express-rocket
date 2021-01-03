@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.16](https://github.com/huksley/express-rocket/compare/v0.1.15...v0.1.16) (2021-01-03)
+
+
+### Features
+
+* store scope and provider in user profile ([c296c4f](https://github.com/huksley/express-rocket/commit/c296c4f3f0ddc3a9fe94fb7f326617641013a25b))
+
 ### [0.1.15](https://github.com/huksley/express-rocket/compare/v0.1.14...v0.1.15) (2021-01-02)
 
 
