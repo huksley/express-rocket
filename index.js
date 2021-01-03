@@ -278,10 +278,6 @@ const launch = options => {
     app.crud(prefix, dao, updatedOptions)
   }
 
-  if (options.apis) {
-    options.apis(app, options)
-  }
-
   app.get('/error', async (req, res) => {
     res.render('error', {
       baseUrl,
@@ -329,13 +325,14 @@ const launch = options => {
               }
             ]
           }
-          const accessToken = 'deadbeef'
-          const refreshToken = 'beefdead'
+          const accessToken = process.env.LOCAL_GOOGLE_ACCESS_TOKEN || 'deadbeef'
+          const refreshToken = process.env.LOCAL_GOOGLE_REFRESH_TOKEN || 'beefdead'
           profile.credentials = {
             accessToken,
             refreshToken
           }
           profile.email = email
+          profile.scope = process.env.LOCAL_GOOGLE_SCOPE || 'email profile'
           User.upsert({ email }, profile).then(user => {
             signToken({
               id: profile.id,
@@ -359,6 +356,7 @@ const launch = options => {
       res.render('local-login', {
         baseUrl,
         session: req.session,
+        title: 'Login',
         user:
           req.session.passport && req.session.passport.user && req.session.passport.user.token
             ? req.session.passport.user
@@ -429,17 +427,21 @@ const launch = options => {
       )
     )
 
-    app.get(
-      '/auth/login',
+    app.authHandler = scope =>
       passport.authenticate('google', {
         // https://developers.google.com/identity/protocols/oauth2/web-server
         // https://developers.google.com/identity/protocols/oauth2/openid-connect#scope-param
-        scope: process.env.GOOGLE_SCOPES ? process.env.GOOGLE_SCOPES.split(' ') : ['profile', 'email'],
+        scope: scope
+          ? scope
+          : process.env.GOOGLE_SCOPES
+          ? process.env.GOOGLE_SCOPES.split(' ')
+          : ['profile', 'email'],
         prompt: process.env.GOOGLE_PROMPT || 'consent',
         accessType: 'offline',
         includeGrantedScopes: true
       })
-    )
+
+    app.get('/auth/login', app.authHandler())
 
     app.get(
       '/auth/google/callback',
@@ -454,6 +456,10 @@ const launch = options => {
         }
       }
     )
+  }
+
+  if (options.apis) {
+    options.apis(app, options)
   }
 
   app.use(function (err, req, res, _next) {
