@@ -18,6 +18,7 @@ const LocalStrategy = require('passport-local').Strategy
 const ejs = require('ejs')
 const { User } = require('./lib/user')
 const dao = require('./lib/dao')
+const fetch = require('node-fetch')
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -320,6 +321,7 @@ const launch = options => {
             email,
             email_verified: true,
             displayName: 'Tester',
+            provider: 'test',
             emails: [
               {
                 value: email,
@@ -369,7 +371,11 @@ const launch = options => {
       '/auth/submit',
       passport.authenticate('local', { failureRedirect: baseUrl + '/error' }),
       function (req, res) {
-        res.redirect('/dashboard')
+        if (options.onLogin) {
+          options.onLogin(req, res)
+        } else {
+          res.redirect('/dashboard')
+        }
       }
     )
   }
@@ -381,27 +387,44 @@ const launch = options => {
           ...config,
           passReqToCallback: true
         },
-        function (req, accessToken, refreshToken, profile, done) {
-          const email = profile.email ? profile.email : profile.emails[0].value
-          logger.info('Logged in to Google', profile.id, email)
-          profile.credentials = {
-            accessToken,
-            refreshToken
-          }
-          profile.email = email
-          User.upsert({ email }, profile).then(user => {
-            signToken({
-              id: profile.id,
-              sub: email,
-              accessToken,
-              refreshToken,
-              userId: user._id
-            }).then(token => {
-              profile.token = token
-              profile.userId = user._id
-              done(null, profile)
+        (req, accessToken, refreshToken, profile, done) => {
+          fetch(
+            'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' + encodeURIComponent(accessToken)
+          )
+            .then(response => response.json())
+            .then(tokenInfo => {
+              const email = profile.email ? profile.email : profile.emails[0].value
+
+              if (tokenInfo.error) {
+                logger.warn('Failed to fetch token information', email, tokenInfo.error)
+                return done(null, false)
+              }
+
+              logger.info('Logged in to Google', profile.id, email, tokenInfo)
+              profile.credentials = {
+                accessToken,
+                refreshToken
+              }
+              profile.email = email
+              profile.scope = tokenInfo.scope
+              User.upsert({ email }, profile).then(user => {
+                signToken({
+                  id: profile.id,
+                  sub: email,
+                  accessToken,
+                  refreshToken,
+                  userId: user._id
+                }).then(token => {
+                  profile.token = token
+                  profile.userId = user._id
+                  done(null, profile)
+                })
+              })
             })
-          })
+            .catch(error => {
+              logger.warn('Failed to fetch token information', profile.email, error)
+              return done(null, false)
+            })
         }
       )
     )
@@ -410,10 +433,11 @@ const launch = options => {
       '/auth/login',
       passport.authenticate('google', {
         // https://developers.google.com/identity/protocols/oauth2/web-server
+        // https://developers.google.com/identity/protocols/oauth2/openid-connect#scope-param
         scope: process.env.GOOGLE_SCOPES ? process.env.GOOGLE_SCOPES.split(' ') : ['profile', 'email'],
-        prompt: 'consent',
+        prompt: process.env.GOOGLE_PROMPT || 'consent',
         accessType: 'offline',
-        includeGrantedScopes: false
+        includeGrantedScopes: true
       })
     )
 
@@ -423,8 +447,11 @@ const launch = options => {
         failureRedirect: baseUrl + '/error'
       }),
       function (req, res) {
-        // Successful authentication, redirect success
-        res.redirect('/dashboard')
+        if (options.onLogin) {
+          options.onLogin(req, res)
+        } else {
+          res.redirect('/dashboard')
+        }
       }
     )
   }
