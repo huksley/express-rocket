@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.17](https://github.com/huksley/express-rocket/compare/v0.1.16...v0.1.17) (2021-01-03)
+
+
+### Features
+
+* allow to generate login link for more scopes ([8e0d044](https://github.com/huksley/express-rocket/commit/8e0d044e68073513b57363e4347ab3ea02647605))
+
 ### [0.1.16](https://github.com/huksley/express-rocket/compare/v0.1.15...v0.1.16) (2021-01-03)
 
 
