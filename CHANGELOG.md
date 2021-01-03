@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.18](https://github.com/huksley/express-rocket/compare/v0.1.17...v0.1.18) (2021-01-03)
+
+
+### Features
+
+* overridable nav ([2ff48c4](https://github.com/huksley/express-rocket/commit/2ff48c4215cde002aab18cd2fb1c4ca3d94177e5))
+
 ### [0.1.17](https://github.com/huksley/express-rocket/compare/v0.1.16...v0.1.17) (2021-01-03)
 
 
