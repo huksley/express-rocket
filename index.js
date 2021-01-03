@@ -162,7 +162,7 @@ const launch = options => {
     })
   })
 
-  const knownPage = /^faq|changelog|privacy|tos|feedback|support|sandbox|pricing$/
+  const knownPage = /^faq|changelog|privacy|tos|feedback|support|sandbox|pricing|integrations$/
   app.get('/:page', async (req, res, next) => {
     const page = req.params.page
     if (knownPage.test(page)) {

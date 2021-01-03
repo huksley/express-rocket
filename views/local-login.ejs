@@ -4,6 +4,7 @@
     <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{%= baseUrl %}/styles.css" />
+    {% if (options.content.head) { %} {%- options.content.head %} {% } %}
   </head>
 
   <body>
@@ -26,7 +27,8 @@
       </form>
     </main>
 
-    {%- include('footer') %} {% if (livereload) { %}
+    {%- include('footer') %} {% if (options.content.scripts) { %} {%- options.content.scripts %} {% } %} {% if
+    (livereload) { %}
     <script async defer src="http://localhost:35729/livereload.js"></script>
     {% } %}
   </body>
